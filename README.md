@@ -1,33 +1,51 @@
-# calendario_vue
+## Setup
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
+# npm
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+## Development Server
 
-```sh
+Start the development server on `http://localhost:3000`:
+
+```bash
+# npm
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+## Production
 
-```sh
+Build the application for production:
+
+```bash
+# npm
 npm run build
 ```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+```
+
+## Prisma
+
+npx prisma init --datasource-provider sqlite
+npx prisma migrate dev --name init
+
+## Links
+
+https://nuxt.com/modules/prisma
+https://nuxt.com/docs/guide/directory-structure/server
+https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
+https://nuxt.com/docs/getting-started/data-fetching
+https://nuxt.com/docs/getting-started/routing
+https://nuxt.com/docs/getting-started/views
+https://tailwindcss.com/docs/guides/nuxtjs
+https://vuejs.org/guide/essentials/computed.html
+https://vuejs.org/api/reactivity-core.html#ref
+https://nuxt.com/docs/api/composables/use-fetch
+https://www.prisma.io/docs/orm/prisma-client/queries/crud#create
+https://www.prisma.io/docs/getting-started/quickstart-sqlite
