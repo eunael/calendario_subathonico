@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col items-center justify-center h-screen bg-black text-white">
-      <div class="w-full max-w-md px-4 sm:px-0">
+      <div class="w-full max-w-md">
         <div class="flex justify-between items-center mb-4">
           <button @click="previousMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -53,21 +53,9 @@
           </div>
         </div>
       </div>
-      <form @submit.prevent="submitRange" class="mt-4 text-center">
-        <div class="mb-2">
-          <label for="inicio" class="block text-sm font-medium">Início</label>
-          <input type="date" id="inicio" v-model="rangeStart" class="px-4 py-2 bg-gray-800 text-white rounded" required />
-        </div>
-        <div class="mb-4">
-          <label for="fim" class="block text-sm font-medium">Fim</label>
-          <input type="date" id="fim" v-model="rangeEnd" class="px-4 py-2 bg-gray-800 text-white rounded" required />
-        </div>
-        <button type="submit" class="px-4 py-2 bg-green-700 hover:bg-green-600 rounded mr-2">Submeter</button>
-        <button type="button" @click="clearRange" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">Limpar</button>
-      </form>
     </div>
 </template>
-  
+
 <script>
   import moment from "moment";
   
@@ -77,8 +65,6 @@
         currentYear: moment().year(),
         currentMonth: moment().month(),
         daysOfWeek: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-        rangeStart: "",
-        rangeEnd: "",
         highlightedRange: [],
       };
     },
@@ -130,34 +116,33 @@
         this.currentYear = today.year();
         this.currentMonth = today.month();
       },
-      submitRange() {
-        const startDate = moment(this.rangeStart);
-        const endDate = moment(this.rangeEnd);
+      async fetchTimestamp() {
+        try {
+          // Simulação do endpoint (comente esta linha para usar um fetch real)
+          const timestamp = 1737511856253; // Exemplo de timestamp (26 de abril de 2024 até esta data)
+          const endDate = moment(timestamp);
+          const startDate = moment("2024-04-26");
   
-        if (startDate.isAfter(endDate)) {
-          alert("A data de início não pode ser maior que a data de fim.");
-          return;
+          const range = [];
+          let currentDate = moment(startDate);
+  
+          while (currentDate.isSameOrBefore(endDate)) {
+            range.push(moment(currentDate));
+            currentDate.add(1, "day");
+          }
+  
+          this.highlightedRange = range;
+        } catch (error) {
+          console.error("Erro ao buscar o timestamp:", error);
         }
-  
-        const range = [];
-        let currentDate = moment(startDate);
-  
-        while (currentDate.isSameOrBefore(endDate)) {
-          range.push(moment(currentDate));
-          currentDate.add(1, "day");
-        }
-  
-        this.highlightedRange = range;
       },
-      clearRange() {
-        this.rangeStart = "";
-        this.rangeEnd = "";
-        this.highlightedRange = [];
-      },
+    },
+    mounted() {
+      this.fetchTimestamp();
     },
   };
 </script>
-  
+
 <style scoped>
 body {
 margin: 0;
