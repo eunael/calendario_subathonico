@@ -1,93 +1,101 @@
 <template>
     <div class="flex flex-col items-center justify-center h-screen bg-black text-white">
-      <div class="w-full max-w-md px-4 sm:px-0">
-
-        <div class="mb-8 flex justify-between items-center gap-2">
-          <div class="text-end text-4xl font-extrabold ">
-            Calendário Subathônico
+      <div class="flex justify-center items-center flex-grow">
+        <div class="w-full max-w-md px-4 sm:px-0">
+  
+          <div class="mb-8 flex justify-between items-center gap-2">
+            <div class="text-end text-4xl font-extrabold ">
+              Calendário Subathônico
+            </div>
+  
+            <img src="/img/PETTHEPEEPOMEIAUM.gif" alt="PET THE PEEPO MEIAUM">
           </div>
-
-          <img src="/img/PETTHEPEEPOMEIAUM.gif" alt="PET THE PEEPO MEIAUM">
-        </div>
-
-        <!-- Calendar navigation -->
-        <div class="flex justify-between items-center mb-4">
-          <button @click="previousMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
-          </button>
-
-          <h2 class="text-xl font-bold">{{ currentMonthName }} {{ currentYear }}</h2>
-          
-          <button @click="nextMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
-          </button>
-        </div>
-
-        <button @click="goToToday" class="mb-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded">Hoje</button>
-        <!-- Calendar navigation -->
-
-        <div class="grid grid-cols-7 gap-2 text-center">
-          
-          <div v-for="day in daysOfWeek" :key="day" class="font-bold">{{ day }}</div>
-
-          <div
-            v-for="day in previousMonthDays"
-            :key="`prev-${day}`"
-            :class="{
-              'bg-green-500 bg-opacity-20 text-white': isInRange(day, -1) === 'green',
-              'bg-white bg-opacity-20 text-black': isInRange(day, -1) === 'white',
-              'bg-sky-600 bg-opacity-20 text-white': isLastInRange(day, -1),
-              'text-gray-500': isInRange(day, -1) === null,
-            }"
-            class="px-4 py-2 rounded cursor-pointer"
-          >
-            {{ day }}
-          </div>
-
-          <div
-            v-for="day in daysInMonth"
-            :key="`day-${day}`"
-            :class="{
-              'bg-red-500 text-white': isToday(day),
-              'bg-green-500 text-white': !isToday(day) && isInRange(day, 0) === 'green',
-              'bg-gray-50 text-black': !isToday(day) && isInRange(day, 0) === 'white',
-              'bg-sky-600 text-white': isLastInRange(day, 0),
-              'text-gray-500': !isToday(day) && isInRange(day, 0) === null,
-            }"
-            class="px-4 py-2 rounded cursor-pointer relative z-0"
-          >
-            <span class="z-20">
-              {{ day }}
-            </span>
-
-            <img v-if="isLastInRange(day, 0)" src="/img/meiaA.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
-
-            <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+  
+          <!-- Calendar navigation -->
+          <div class="flex justify-between items-center mb-4">
+            <button @click="previousMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+            </button>
+  
+            <h2 class="text-xl font-bold">{{ currentMonthName }} {{ currentYear }}</h2>
             
-            <img v-if="isToday(day)" src="/img/peepoMeiaTalk.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
-
-            <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
-
+            <button @click="nextMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+            </button>
           </div>
-
-          <div
-            v-for="day in nextMonthDays"
-            :key="`next-${day}`"
-            :class="{
-              'bg-green-500 bg-opacity-20 text-white': isInRange(day, 1) === 'green',
-              'bg-white bg-opacity-20 text-black': isInRange(day, 1) === 'white',
-              'bg-sky-600 bg-opacity-20 text-white': isLastInRange(day, 1),
-              'text-gray-500': isInRange(day, 1) === null,
-            }"
-            class="px-4 py-2 rounded cursor-pointer"
-          >
-            {{ day }}
+  
+          <button @click="goToToday" class="mb-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded">Hoje</button>
+          <!-- Calendar navigation -->
+  
+          <div class="grid grid-cols-7 gap-2 text-center">
+            
+            <div v-for="day in daysOfWeek" :key="day" class="font-bold">{{ day }}</div>
+  
+            <div
+              v-for="day in previousMonthDays"
+              :key="`prev-${day}`"
+              :class="{
+                'bg-green-500 bg-opacity-20 text-white': isInRange(day, -1) === 'green',
+                'bg-white bg-opacity-20 text-black': isInRange(day, -1) === 'white',
+                'bg-sky-600 bg-opacity-20 text-white': isLastInRange(day, -1),
+                'text-gray-500': isInRange(day, -1) === null,
+              }"
+              class="px-4 py-2 rounded cursor-pointer"
+            >
+              {{ day }}
+            </div>
+  
+            <div
+              v-for="day in daysInMonth"
+              :key="`day-${day}`"
+              :class="{
+                'bg-red-500 text-white': isToday(day),
+                'bg-green-500 text-white': !isToday(day) && isInRange(day, 0) === 'green',
+                'bg-gray-50 text-black': !isToday(day) && isInRange(day, 0) === 'white',
+                'bg-sky-600 text-white': isLastInRange(day, 0),
+                'text-gray-500': !isToday(day) && isInRange(day, 0) === null,
+              }"
+              class="px-4 py-2 rounded cursor-pointer relative z-0"
+            >
+              <span class="z-20">
+                {{ day }}
+              </span>
+  
+              <img v-if="isLastInRange(day, 0)" src="/img/meiaA.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+  
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              
+              <img v-if="isToday(day)" src="/img/peepoMeiaTalk.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+  
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+  
+            </div>
+  
+            <div
+              v-for="day in nextMonthDays"
+              :key="`next-${day}`"
+              :class="{
+                'bg-green-500 bg-opacity-20 text-white': isInRange(day, 1) === 'green',
+                'bg-white bg-opacity-20 text-black': isInRange(day, 1) === 'white',
+                'bg-sky-600 bg-opacity-20 text-white': isLastInRange(day, 1),
+                'text-gray-500': isInRange(day, 1) === null,
+              }"
+              class="px-4 py-2 rounded cursor-pointer"
+            >
+              {{ day }}
+            </div>
+  
           </div>
-
+  
+          <div class="mt-4 font-extrabold text-end">
+            {{ highlightedRange.length }} dias de live...
+          </div>
         </div>
       </div>
-      <div class="mt-4 font-extrabold">
-        {{ highlightedRange.length }} dias de live...
+
+      <div class="text-white text-center text-sm py-3">
+          2025&copy;, Feito com 🙂 por <a href="https://github.com/eunael" class="link text-blue-500"
+              target="_blank">eunael</a>.
       </div>
     </div>
 </template>
