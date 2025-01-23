@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     time = await prisma.time.create({
       data: {
         timestamp: '1738378800000',
-        timeToUpdate: moment().add(1, 'day').format('YYYY-MM-DD hh:mm:ss')
+        timeToUpdate: moment().hour(6).add(1, 'day').format('YYYY-MM-DD hh:mm:ss')
       }
     })
   } else if(moment().isAfter(time.timeToUpdate)) {
