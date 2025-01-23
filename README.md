@@ -61,3 +61,5 @@ https://nuxt.com/docs/api/composables/use-fetch
 https://www.prisma.io/docs/orm/prisma-client/queries/crud#create
 
 https://www.prisma.io/docs/getting-started/quickstart-sqlite
+
+https://axios-http.com/ptbr/docs/intro
