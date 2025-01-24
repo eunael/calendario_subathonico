@@ -63,3 +63,5 @@ https://www.prisma.io/docs/orm/prisma-client/queries/crud#create
 https://www.prisma.io/docs/getting-started/quickstart-sqlite
 
 https://axios-http.com/ptbr/docs/intro
+
+https://github.com/geekyshow1/GeekyShowsNotes/blob/main/nginx/Deploy_NuxtJS_Nginx.md

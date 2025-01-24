@@ -13,4 +13,7 @@ export default defineNuxtConfig({
     secretEndpoint: 'http://localhost:3000/api/time-left'
   },
   modules: ["@prisma/nuxt"],
+  alias: {
+    ".prisma/client/index-browser": `node_modules/.prisma/client/index-browser.js`,
+  },
 })
