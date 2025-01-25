@@ -30,7 +30,7 @@ final class TimeController extends AbstractController
 
             $time = new Time(
                 $finalTime,
-                Carbon::now('America/Sao_Paulo')->addDay()->toDateTimeString()
+                Carbon::now('America/Sao_Paulo')->addDay()->hour(6)->toDateTimeString()
             );
 
             $timeRepository->add($time);
