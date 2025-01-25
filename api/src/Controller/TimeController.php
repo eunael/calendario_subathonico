@@ -50,9 +50,9 @@ final class TimeController extends AbstractController
 
             return $this->json($time);
         } catch (\Throwable $th) {
-            return [
+            return $this->json([
                 'error' => $th->getMessage()
-            ];
+            ]);
         }
     }
 }
