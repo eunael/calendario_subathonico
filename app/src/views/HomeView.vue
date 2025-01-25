@@ -91,7 +91,8 @@
 </template>
 
 <script setup lang="ts">
-  import moment, { type Moment } from 'moment'
+  import axios from 'axios';
+import moment, { type Moment } from 'moment'
   import 'moment/locale/pt-br'
   import { computed, type Ref, ref } from 'vue';
   
@@ -165,9 +166,9 @@
     return Array.from({ length: 6 - lastDayOfMonth }, (_, i) => i + 1);
   })
 
-  function fetchTimestamp() {
+  async function fetchTimestamp() {
     try {
-      const data = {timestamp: 1738368000000}
+      const { data } = await axios.get('http://127.0.0.1:8000/api/time').then(res => res)
 
       const timestamp = Number(data?.timestamp);
       const endDate = momentbr(timestamp);
