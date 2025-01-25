@@ -168,7 +168,7 @@ import moment, { type Moment } from 'moment'
 
   async function fetchTimestamp() {
     try {
-      const { data } = await axios.get('http://127.0.0.1:8000/api/time').then(res => res)
+      const { data } = await axios.get('https://api-calendario-subathonico.nziim/api/time').then(res => res)
 
       const timestamp = Number(data?.timestamp);
       const endDate = momentbr(timestamp);
