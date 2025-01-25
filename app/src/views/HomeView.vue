@@ -87,6 +87,11 @@
 
       </div>
     </div>
+
+    <div class="text-white text-center text-sm py-3">
+        2025&copy;, Feito com 🙂 por <a href="https://github.com/eunael" class="link text-blue-500"
+            target="_blank">eunael</a>.
+    </div>
   </div>
 </template>
 
