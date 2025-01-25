@@ -20,10 +20,13 @@ export default defineEventHandler(async (event) => {
 
     const finalTime = currentTime + timeLeft
 
-    return await db.insert(timeTable).values({
+    await db.insert(timeTable).values({
       timestamp: `${finalTime}`,
       timeToUpdate: moment().locale('pt-br').hour(6).add(1, 'days').format('YYYY-MM-DD hh:mm:ss')
-    }).returning()
+    })
+
+    const timesCreated = await db.select().from(timeTable)
+    return timesCreated[0]
   } else if (moment().locale('pt-br').isAfter(time.timeToUpdate)) {
     const data: object = await $fetch(runtimeConfig.secretEndpoint)
     const timeLeft = data?.timeLeft
@@ -31,13 +34,15 @@ export default defineEventHandler(async (event) => {
 
     const finalTime = currentTime + timeLeft
 
-    return await db.update(timeTable)
+    await db.update(timeTable)
       .set({
         timestamp: `${finalTime}`,
         timeToUpdate: moment().locale('pt-br').hour(6).add(1, 'days').format('YYYY-MM-DD hh:mm:ss')
       })
       .where(eq(timeTable.id, time.id))
-      .returning()
+
+    const timesUpdated = await db.select().from(timeTable)
+    return timesUpdated[0]
   }
 
   return time
