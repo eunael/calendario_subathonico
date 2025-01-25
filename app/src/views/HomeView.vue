@@ -91,9 +91,9 @@
 </template>
 
 <script setup lang="ts">
-  import moment, { Moment } from 'moment'
+  import moment, { type Moment } from 'moment'
   import 'moment/locale/pt-br'
-  import { computed, Ref, ref } from 'vue';
+  import { computed, type Ref, ref } from 'vue';
   
   const momentbr = (...args: any) => moment(...args).locale('pt-br')
 
