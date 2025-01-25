@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-  import moment from 'moment'
+  import moment, { Moment } from 'moment'
   import 'moment/locale/pt-br'
   import { computed, Ref, ref } from 'vue';
   
@@ -100,7 +100,7 @@
   const currentYear = ref(momentbr().year())
   const currentMonth = ref(momentbr().month())
   const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
-  const highlightedRange: Ref<moment.Moment[]> = ref([])
+  const highlightedRange: Ref<Moment[]> = ref([])
  
   function nextMonth() {
     const next = momentbr({ year: currentYear.value, month: currentMonth.value }).add(1, "month");
