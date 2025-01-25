@@ -156,7 +156,7 @@ import moment, { type Moment } from 'moment'
   }
 
   const currentMonthName = computed(() => {
-    return ['Jan', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][currentMonth.value]
+    return ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][currentMonth.value]
   })
   const daysInMonth = computed(() => {
     return momentbr({ year: currentYear.value, month: currentMonth.value }).daysInMonth();
