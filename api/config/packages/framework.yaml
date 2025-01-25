@@ -7,6 +7,11 @@ framework:
 
     #esi: true
     #fragments: true
+    
+    http_client:
+        default_options:
+            headers:
+                'User-Agent': 'Calendário Subathônico'
 
 when@test:
     framework:

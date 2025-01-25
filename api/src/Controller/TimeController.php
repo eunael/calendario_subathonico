@@ -21,11 +21,12 @@ final class TimeController extends AbstractController
         $times = $timeRepository->findAll();
         $time = empty($times) ? null : $times[0];
 
-        if($time === null) {
-            $timeLeft = 639358459;
+        if ($time === null) {
+            $timeLeft = $httpClient->request('GET', 'https://subathon-api.justdavi.dev/api/time-left');
+
             $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
-            $finalTime = $currentTime + $timeLeft;
+            $finalTime = $currentTime + $timeLeft->toArray()['timeLeft'];
 
             $time = new Time(
                 $finalTime,
@@ -35,7 +36,7 @@ final class TimeController extends AbstractController
             $timeRepository->add($time);
 
             return $this->json($time);
-        } else if (Carbon::now('America/Sao_Paulo')->isAfter(Carbon::parse($time->getTimeToUpdate()))) {
+        } elseif (Carbon::now('America/Sao_Paulo')->isAfter(Carbon::parse($time->getTimeToUpdate()))) {
             $timeLeft = 639358459;
             $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
@@ -48,7 +49,7 @@ final class TimeController extends AbstractController
 
             return $this->json($time);
         }
-        
+
         return $this->json($time);
     }
 }
