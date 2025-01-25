@@ -30,11 +30,13 @@ Locally preview production build:
 npm run preview
 ```
 
-## Prisma
+## Drizzle
 
-npx prisma init --datasource-provider sqlite
+cp .env.example .env
 
-npx prisma migrate dev --name init
+npx drizzle-kit generate
+
+npx drizzle-kit migrate
 
 ## Links
 
@@ -65,3 +67,8 @@ https://www.prisma.io/docs/getting-started/quickstart-sqlite
 https://axios-http.com/ptbr/docs/intro
 
 https://github.com/geekyshow1/GeekyShowsNotes/blob/main/nginx/Deploy_NuxtJS_Nginx.md
+
+https://orm.drizzle.team/docs/get-started/sqlite-new
+
+https://orm.drizzle.team/docs/rqb
+

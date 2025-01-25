@@ -13,5 +13,4 @@ export default defineNuxtConfig({
   runtimeConfig: {
     secretEndpoint: 'http://localhost:3000/api/time-left'
   },
-  modules: ["@prisma/nuxt"],
 })
