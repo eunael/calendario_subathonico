@@ -41,29 +41,38 @@
           >
             {{ day }}
           </div>
-
+          
           <div
             v-for="day in daysInMonth"
             :key="`day-${day}`"
-            :class="{
-              'bg-red-500 text-white': isToday(day),
-              'bg-green-500 text-white': isInRange(day, 0) === 'green',
-              'bg-gray-50 text-black': isInRange(day, 0) === 'white',
-              'bg-sky-600 text-white': isLastInRange(day, 0),
-            }"
-            class="px-4 py-2 rounded cursor-pointer relative z-0"
           >
-            <span>
-              {{ day }}
-            </span>
+            <div v-if="isToday(day)" class="bg-red-500 text-white px-4 py-2 rounded cursor-pointer relative z-0">
+              <a href="https://twitch.tv/omeiaum" target="_blank">
+                <span>
+                  {{ day }}
+                </span>
+                <img v-if="isToday(day)" src="/img/peepoMeiaTalk.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              </a>
+            </div>
 
-            <img v-if="isLastInRange(day, 0)" src="/img/meiaA.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+            <div v-else
+              :class="{
+                'bg-green-500 text-white': isInRange(day, 0) === 'green',
+                'bg-gray-50 text-black': isInRange(day, 0) === 'white',
+                'bg-sky-600 text-white': isLastInRange(day, 0),
+              }"
+              class="px-4 py-2 rounded cursor-pointer relative z-0"
+            >
+              <span>
+                {{ day }}
+              </span>
 
-            <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
-
-            <img v-if="isToday(day)" src="/img/peepoMeiaTalk.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
-
-            <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="isLastInRange(day, 0)" src="/img/meiaA.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+  
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+  
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+            </div>
           </div>
 
           <div
@@ -97,7 +106,7 @@
 
 <script setup lang="ts">
   import axios from 'axios';
-import moment, { type Moment } from 'moment'
+  import moment, { type Moment } from 'moment'
   import 'moment/locale/pt-br'
   import { computed, type Ref, ref } from 'vue';
   
@@ -124,18 +133,18 @@ import moment, { type Moment } from 'moment'
     currentMonth.value = today.month();
   }
   function isToday(day: number) {
-    return momentbr({ year: currentYear.value, month: currentMonth.value, day }).isSame(moment(), "day");
+    return momentbr({ year: currentYear.value, month: currentMonth.value, day }).isSame(momentbr(), "day");
   }
   function isInRange(day: number, offset: number) {
     const date = momentbr({ year: currentYear.value, month: currentMonth.value }).add(offset, "month").date(day);
 
     if (highlightedRange.value.some(highlightedDate => date.isSame(highlightedDate, "day"))) {
-      return date.isAfter(moment()) ? "white" : "green";
+      return date.isAfter(momentbr()) ? "white" : "green";
     }
     return null;
   }
   function isLastInRange(day: number, offset: number) {
-    const date = moment({ year: currentYear.value, month: currentMonth.value }).add(offset, "month").date(day);
+    const date = momentbr({ year: currentYear.value, month: currentMonth.value }).add(offset, "month").date(day);
     const lastDate = highlightedRange.value[highlightedRange.value.length - 1];
     return lastDate && date.isSame(lastDate, "day");
   }
@@ -180,10 +189,10 @@ import moment, { type Moment } from 'moment'
       const startDate = momentbr("2024-04-26");
 
       const range = [];
-      let currentDate = moment(startDate);
+      let currentDate = momentbr(startDate);
 
       while (currentDate.isSameOrBefore(endDate)) {
-        range.push(moment(currentDate));
+        range.push(momentbr(currentDate));
         currentDate.add(1, "day");
       }
 
