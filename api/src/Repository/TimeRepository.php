@@ -27,4 +27,11 @@ class TimeRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->flush();
     }
+
+    public function remove(Time $entity)
+    {
+        $this->getEntityManager()->remove($entity);
+
+        $this->getEntityManager()->flush();
+    }
 }
