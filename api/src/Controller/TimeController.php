@@ -56,20 +56,20 @@ final class TimeController extends AbstractController
 
                 $time = new Time(
                     $finalTime,
-                    Carbon::now('America/Sao_Paulo')->addDay()->hour(6)->toDateTimeString()
+                    Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString()
                 );
 
                 $timeRepository->add($time);
 
                 return $this->json($time);
-            } elseif (Carbon::now('America/Sao_Paulo')->isAfter(Carbon::parse($time->getTimeToUpdate()))) {
+            } elseif (Carbon::now('America/Sao_Paulo')->isAfter(Carbon::parse($time->getTimeToUpdate(), 'America/Sao_Paulo'))) {
                 $timeLeft = (int) $httpClient->request('GET', $timerEndpoint)->toArray()['timeLeft'];
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
                 $finalTime = strval($currentTime + $timeLeft);
 
                 $time->setTimestamp($finalTime);
-                $time->setTimeToUpdate(Carbon::now('America/Sao_Paulo')->addDay()->hour(6)->toDateTimeString());
+                $time->setTimeToUpdate(Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString());
 
                 $timeRepository->update();
 

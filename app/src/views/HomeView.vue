@@ -91,7 +91,8 @@
         </div>
 
         <div class="mt-4 font-extrabold text-end">
-          {{ highlightedRange.length }} dias de live...
+          {{ highlightedRange.length }} dias de live...<br>
+          {{ timeUntilUpdate }} atualiza
         </div>
 
       </div>
@@ -116,6 +117,9 @@
   const currentMonth = ref(momentbr().month())
   const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
   const highlightedRange: Ref<Moment[]> = ref([])
+  const timeToUpdate = ref("00:00:00")
+  const timeUntilUpdate = ref("00:00:00")
+  let timerInterval: any = null
  
   function nextMonth() {
     const next = momentbr({ year: currentYear.value, month: currentMonth.value }).add(1, "month");
@@ -147,6 +151,27 @@
     const date = momentbr({ year: currentYear.value, month: currentMonth.value }).add(offset, "month").date(day);
     const lastDate = highlightedRange.value[highlightedRange.value.length - 1];
     return lastDate && date.isSame(lastDate, "day");
+  }
+  function updateTimer() {
+    const now = momentbr();
+    const toUpdate = momentbr(timeToUpdate.value);
+    const duration = moment.duration(toUpdate.diff(now));
+
+    const hours = String(duration.hours()).padStart(2, "0");
+    const minutes = String(duration.minutes()).padStart(2, "0");
+    const seconds = String(duration.seconds()).padStart(2, "0");
+
+    timeUntilUpdate.value = `${hours}:${minutes}:${seconds}`;
+
+    if (duration.asSeconds() <= 0) {
+      clearInterval(timerInterval);
+      fetchTimestamp(); // Atualiza o calendário quando der meia-noite
+    }
+  }
+  function startCountdown() {
+    clearInterval(timerInterval); // Evita múltiplos intervalos
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
   }
   const setupDayObject = (day: Moment) => {
     //{day, color range, is last day, is today}
@@ -183,6 +208,9 @@
   async function fetchTimestamp() {
     try {
       const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
+      // const { data } = await axios.get('http://localhost:8000/api/time').then(res => res)
+
+      timeToUpdate.value = data.timeToUpdate
 
       const timestamp = Number(data?.timestamp);
       const endDate = momentbr(timestamp);
@@ -197,6 +225,8 @@
       }
 
       highlightedRange.value = range;
+
+      startCountdown()
     } catch (error) {
       console.error("Erro ao buscar o timestamp:", error);
     }
