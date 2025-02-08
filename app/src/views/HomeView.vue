@@ -118,7 +118,7 @@
   const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
   const highlightedRange: Ref<Moment[]> = ref([])
   const timeToUpdate = ref("00:00:00")
-  const timeUntilUpdate = ref("00:00:00")
+  const timeUntilUpdate = ref("00:00")
   let timerInterval: any = null
  
   function nextMonth() {
@@ -157,11 +157,10 @@
     const toUpdate = momentbr(timeToUpdate.value);
     const duration = moment.duration(toUpdate.diff(now));
 
-    const hours = String(duration.hours()).padStart(2, "0");
     const minutes = String(duration.minutes()).padStart(2, "0");
     const seconds = String(duration.seconds()).padStart(2, "0");
 
-    timeUntilUpdate.value = `${hours}:${minutes}:${seconds}`;
+    timeUntilUpdate.value = `${minutes}:${seconds}`;
 
     if (duration.asSeconds() <= 0) {
       clearInterval(timerInterval);
