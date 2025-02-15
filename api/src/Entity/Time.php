@@ -13,12 +13,13 @@ class Time
     #[ORM\Column]
     private ?int $id = null;
 
-
     public function __construct(
         #[ORM\Column(length: 255)]
         private ?string $finalTime = null,
         #[ORM\Column(length: 255)]
-        private ?string $timeToUpdate = null
+        private ?string $timeToUpdate = null,
+        #[ORM\Column()]
+        private ?int $totalDays = null
     ) {
     }
 
@@ -47,6 +48,18 @@ class Time
     public function setTimeToUpdate(string $timeToUpdate): static
     {
         $this->timeToUpdate = $timeToUpdate;
+
+        return $this;
+    }
+
+    public function getTotalDays(): ?string
+    {
+        return $this->totalDays;
+    }
+
+    public function setTotalDays(string $totalDays): static
+    {
+        $this->totalDays = $totalDays;
 
         return $this;
     }

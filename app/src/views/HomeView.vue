@@ -12,18 +12,18 @@
         </div>
 
         <div class="flex justify-between items-center mb-4">
-          <button @click="previousMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+          <button @click="previousMonth" class="cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
           </button>
 
           <h2 class="text-xl font-bold">{{ currentMonthName }} / {{ currentYear }}</h2>
           
-          <button @click="nextMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+          <button @click="nextMonth" class="cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
           </button>
         </div>
 
-        <button @click="goToToday" class="mb-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded">Hoje</button>
+        <button @click="goToToday" class="cursor-pointer mb-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded">Hoje</button>
 
         <div class="grid grid-cols-7 gap-2 text-center">
 
@@ -91,7 +91,7 @@
         </div>
 
         <div class="mt-4 font-extrabold text-end">
-          {{ highlightedRange.length }} dias de live...<br>
+          {{ totalDays }} dias de live...<br>
           {{ timeUntilUpdate }} atualiza
         </div>
 
@@ -119,6 +119,7 @@
   const highlightedRange: Ref<Moment[]> = ref([])
   const timeToUpdate = ref("00:00:00")
   const timeUntilUpdate = ref("00:00")
+  const totalDays = ref(0)
   let timerInterval: any = null
  
   function nextMonth() {
@@ -210,14 +211,15 @@
       // const { data } = await axios.get('http://localhost:8000/api/time').then(res => res)
 
       timeToUpdate.value = data.timeToUpdate
+      totalDays.value = data.totalDays
 
-      const timestamp = Number(data?.timestamp);
-      const endDate = momentbr(timestamp);
+      const finalTime = data?.finalTime;
+      const endDate = momentbr(finalTime);
       const startDate = momentbr("2024-04-26");
 
       const range = [];
       let currentDate = momentbr(startDate);
-
+      
       while (currentDate.isSameOrBefore(endDate)) {
         range.push(momentbr(currentDate));
         currentDate.add(1, "day");

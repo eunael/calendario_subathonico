@@ -46,17 +46,21 @@ final class TimeController extends AbstractController
             $times = $timeRepository->findAll();
             $time = empty($times) ? null : $times[0];
             $timerEndpoint = $this->params->get('timer.timer_endpoint');
+            $initialDay = Carbon::create(2024, 4, 26);
 
             if ($time === null) {
                 $timeLeft = (int) $httpClient->request('GET', $timerEndpoint)->toArray()['timeLeft'];
 
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
-                $finalTime = $currentTime + $timeLeft;
+                $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
+                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString();
+                $totalDays = (int) $initialDay->diffInDays($finalTime);
 
                 $time = new Time(
                     $finalTime,
-                    Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString()
+                    $timeToUpdate,
+                    $totalDays
                 );
 
                 $timeRepository->add($time);
@@ -64,12 +68,16 @@ final class TimeController extends AbstractController
                 return $this->json($time);
             } elseif (Carbon::now('America/Sao_Paulo')->isAfter(Carbon::parse($time->getTimeToUpdate(), 'America/Sao_Paulo'))) {
                 $timeLeft = (int) $httpClient->request('GET', $timerEndpoint)->toArray()['timeLeft'];
+
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
-                $finalTime = strval($currentTime + $timeLeft);
+                $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
+                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString();
+                $totalDays = (int) Carbon::create(2024, 4, 26)->diffInDays($finalTime);
 
-                $time->setTimestamp($finalTime);
-                $time->setTimeToUpdate(Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString());
+                $time->setFinalTime($finalTime);
+                $time->setTimeToUpdate($timeToUpdate);
+                $time->setTotalDays($totalDays);
 
                 $timeRepository->update();
 

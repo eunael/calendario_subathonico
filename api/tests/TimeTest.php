@@ -30,28 +30,27 @@ class TimeTest extends KernelTestCase
         ];
         $client = new MockHttpClient($responses);
         //endregion
-        
+
         $timeLeft = $client->request('GET', 'https://test.dev/api/time-left')->toArray()['timeLeft'];
 
         $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
-        $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
-        $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString();
+        $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo');
+        $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(5);
+        $totalDays = (int) Carbon::create(2024, 4, 26)->diffInDays($finalTime, true);
 
         $time = new Time(
-            $finalTime,
-            $timeToUpdate
+            $finalTime->toDateTimeString(),
+            $timeToUpdate->toDateTimeString(),
+            $totalDays
         );
 
-        // instance Entity Manager
-        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
-        assert($entityManager instanceof EntityManagerInterface);
-        // persisting time
-        $entityManager->persist($time);
-        $entityManager->flush();
-        
+        $timeRepository = $this->getTimeRepository();
+
+        $timeRepository->add($time);
+
         // get all times
-        $timesFromDb = $this->getTimeRepository()->findAll();
+        $timesFromDb = $timeRepository->findAll();
 
         // assert that there is only one time
         assertEquals(count($timesFromDb), 1);
@@ -61,6 +60,56 @@ class TimeTest extends KernelTestCase
         assert($timeFromDb instanceof Time);
         assertEquals($timeFromDb->getFinalTime(), $finalTime);
         assertEquals($timeFromDb->getTimeToUpdate(), $timeToUpdate);
+        assertEquals($timeFromDb->getTotalDays(), $totalDays);
+    }
+
+    public function test_should_update_if_already_exists_and_return_time()
+    {
+        self::bootKernel();
+
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+
+        //region Create time entity
+        $timeLeftEntity = 50 * 60 * 60 * 1000;
+        $currentTimeEntity = Carbon::now('America/Sao_Paulo')->getTimestampMs();
+        $timeToUpdateEntity = Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString();
+        $finalTimeEntity = Carbon::createFromTimestampMs($currentTimeEntity + $timeLeftEntity, 'America/Sao_Paulo')->toDateTimeString();
+        $totalDaysEntity = (int) Carbon::create(2024, 4, 26)->diffInDays($finalTimeEntity);
+        $timeEntity = new Time($finalTimeEntity, $timeToUpdateEntity, $totalDaysEntity);
+        $entityManager->persist($timeEntity);
+        $entityManager->flush();
+        //endregion
+
+        //region Mock request to API
+        $timeLeftResponse = 100 * 60 * 60 * 1000;
+        $responses = [
+            new MockResponse(body: json_encode(['timeLeft' => $timeLeftResponse]))
+        ];
+        $client = new MockHttpClient($responses);
+        //endregion
+
+        $timeLeft = $client->request('GET', 'https://test.dev/api/time-left')->toArray()['timeLeft'];
+
+        $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
+
+        $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
+        $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString();
+        $totalDays = (int) Carbon::create(2024, 4, 26)->diffInDays($finalTime);
+
+        $timeRepository = $this->getTimeRepository();
+
+        $time = $timeRepository->find($timeEntity->getId());
+        $time->setFinalTime($finalTime);
+        $time->setTimeToUpdate($timeToUpdate);
+        $time->setTotalDays($totalDays);
+
+        // persisting time
+        $timeRepository->update();
+
+        // assert that the time saved has correct data
+        assertEquals($time->getFinalTime(), $finalTime);
+        assertEquals($time->getTimeToUpdate(), $timeToUpdate);
+        assertEquals($time->getTotalDays(), $totalDays);
     }
 
     private function getTimeRepository(): TimeRepository
