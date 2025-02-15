@@ -16,7 +16,7 @@ class Time
 
     public function __construct(
         #[ORM\Column(length: 255)]
-        private ?string $timestamp = null,
+        private ?string $finalTime = null,
         #[ORM\Column(length: 255)]
         private ?string $timeToUpdate = null
     ) {
@@ -27,14 +27,14 @@ class Time
         return $this->id;
     }
 
-    public function getTimestamp(): ?string
+    public function getFinalTime(): ?string
     {
-        return $this->timestamp;
+        return $this->finalTime;
     }
 
-    public function setTimestamp(string $timestamp): static
+    public function setFinalTime(string $finalTime): static
     {
-        $this->timestamp = $timestamp;
+        $this->finalTime = $finalTime;
 
         return $this;
     }
