@@ -37,7 +37,7 @@
               'bg-gray-50/70': isInRange(day, -1) === 'white',
               'bg-sky-600/30 text-white': isLastInRange(day, -1),
             }"
-            class="text-gray-500 px-4 py-2 rounded cursor-pointer"
+            class="text-gray-500 px-4 py-2 rounded"
           >
             {{ day }}
           </div>
@@ -59,9 +59,10 @@
               :class="{
                 'bg-green-500 text-white': isInRange(day, 0) === 'green',
                 'bg-gray-50 text-black': isInRange(day, 0) === 'white',
-                'bg-sky-600 text-white': isLastInRange(day, 0),
+                'bg-sky-600 text-white cursor-pointer': isLastInRange(day, 0),
               }"
-              class="px-4 py-2 rounded cursor-pointer relative z-0"
+              class="px-4 py-2 rounded relative z-0"
+              :title="isLastInRange(day, 0) ? lastTime : ''"
             >
               <span>
                 {{ day }}
@@ -83,7 +84,7 @@
               'bg-gray-50/70': isInRange(day, 1) === 'white',
               'bg-sky-600/30 text-white': isLastInRange(day, 1),
             }"
-            class="text-gray-500 px-4 py-2 rounded cursor-pointer"
+            class="text-gray-500 px-4 py-2 rounded"
           >
             {{ day }}
           </div>
@@ -120,6 +121,7 @@
   const timeToUpdate = ref("00:00:00")
   const timeUntilUpdate = ref("00:00")
   const totalDays = ref(0)
+  const lastTime = ref('')
   let timerInterval: any = null
  
   function nextMonth() {
@@ -212,7 +214,8 @@
 
       timeToUpdate.value = data.timeToUpdate
       totalDays.value = data.totalDays
-
+      lastTime.value = data?.finalTime
+      
       const finalTime = data?.finalTime;
       const endDate = momentbr(finalTime);
       const startDate = momentbr("2024-04-26");
