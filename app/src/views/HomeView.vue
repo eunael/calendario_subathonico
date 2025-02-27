@@ -63,16 +63,17 @@
               }"
               class="px-4 py-2 rounded relative z-0"
               :title="isLastInRange(day, 0) ? lastTime : ''"
+              @click="() => isLastInRange(day, 0) && showToast()"
             >
               <span>
                 {{ day }}
               </span>
 
-              <img v-if="isLastInRange(day, 0)" src="/img/meiaA.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="isLastInRange(day, 0)" src="/img/meiaA.gif" alt="Animação do meia um desaparecendo" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
-              <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="Meia um fazendo joia com o polegar" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
-              <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="Meia um dormindo confi" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
             </div>
           </div>
 
@@ -103,6 +104,22 @@
         2025&copy;, Feito com 🙂 por <a href="https://github.com/eunael" class="link text-blue-500"
             target="_blank">eunael</a>.
     </div>
+
+    <Transition name="fade">
+      <div
+        v-if="showToastState"
+        class="bg-black text-gray-50 text-nowrap absolute w-full h-screen flex justify-center items-center"
+      >
+        <div class="text-center font-bold">
+          <p>Termina, talvez...</p>
+          <p class="sm:text-4xl text-2xl mt-3">
+            {{ lastTime }}
+          </p>
+          <img class="mx-auto mt-8" src="/img/MeiaTimer.gif" alt="Meia um olhando para cima vendo o timer da subathon comicamente alto">
+        </div>
+      </div>
+    </Transition>
+
   </div>
 </template>
 
@@ -122,6 +139,7 @@
   const timeUntilUpdate = ref("00:00")
   const totalDays = ref(0)
   const lastTime = ref('')
+  const showToastState = ref(false)
   let timerInterval: any = null
  
   function nextMonth() {
@@ -175,20 +193,11 @@
     updateTimer();
     timerInterval = setInterval(updateTimer, 1000);
   }
-  const setupDayObject = (day: Moment) => {
-    //{day, color range, is last day, is today}
-    const todayMoment = momentbr()
-    const numDay = day.day()
-    const diffMonth = day.month() - todayMoment.month();
-
-    const colorRange = isInRange(numDay, diffMonth)
-    const isLastDay = isLastInRange(numDay, diffMonth)
-    const today = isToday(numDay)
-
-    return {
-      day, colorRange, isLastDay,
-      isToday: today
-    }
+  function showToast() {
+    showToastState.value = true;
+    setTimeout(() => {
+      showToastState.value = false;
+    }, 3000);
   }
 
   const currentMonthName = computed(() => {
@@ -212,12 +221,13 @@
       const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
       // const { data } = await axios.get('http://localhost:8000/api/time').then(res => res)
 
+      const finalTime = momentbr(data?.finalTime);
+
       timeToUpdate.value = data.timeToUpdate
       totalDays.value = data.totalDays
-      lastTime.value = data?.finalTime
+      lastTime.value = finalTime.format('DD/MM/YYYY à[s] HH:mm:ss')
       
-      const finalTime = data?.finalTime;
-      const endDate = momentbr(finalTime);
+      const endDate = finalTime;
       const startDate = momentbr("2024-04-26");
 
       const range = [];
@@ -238,3 +248,15 @@
 
   fetchTimestamp()
 </script>
+
+<style>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+</style>
