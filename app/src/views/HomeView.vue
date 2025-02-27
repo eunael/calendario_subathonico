@@ -62,7 +62,7 @@
                 'bg-sky-600 text-white cursor-pointer': isLastInRange(day, 0),
               }"
               class="px-4 py-2 rounded relative z-0"
-              @click="() => isLastInRange(day, 0) && showToast()"
+              @mousedown="() => isLastInRange(day, 0) && showToast()"
             >
               <span>
                 {{ day }}
