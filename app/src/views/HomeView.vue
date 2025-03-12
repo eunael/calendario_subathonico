@@ -183,13 +183,12 @@
     timeUntilUpdate.value = `${minutes}:${seconds}`;
 
     if (duration.asMilliseconds() <= 0) {
-      clearInterval(timerInterval);
-      fetchTimestamp(); // Atualiza o calendário quando der meia-noite
+      startCountdown()
     }
   }
   function startCountdown() {
-    clearInterval(timerInterval); // Evita múltiplos intervalos
-    updateTimer();
+    clearInterval(timerInterval);
+    fetchTimestamp();
     timerInterval = setInterval(updateTimer, 1000);
   }
   function showToast() {
@@ -217,8 +216,8 @@
 
   async function fetchTimestamp() {
     try {
-      // const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
-      const { data } = await axios.get('http://localhost:8000/api/time').then(res => res)
+      const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
+      // const { data } = await axios.get('http://localhost:8001/api/time').then(res => res)
 
       const finalTime = momentbr(data?.finalTime);
 
@@ -239,13 +238,13 @@
 
       highlightedRange.value = range;
 
-      startCountdown()
     } catch (error) {
       console.error("Erro ao buscar o timestamp:", error);
     }
   }
 
-  fetchTimestamp()
+  startCountdown()
+
 </script>
 
 <style>
