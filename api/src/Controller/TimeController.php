@@ -54,7 +54,7 @@ final class TimeController extends AbstractController
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
                 $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
-                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addSeconds(30)->toDateTimeString();
+                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(2)->toDateTimeString();
                 $totalDays = (int) $initialDay->diffInDays($finalTime);
 
                 $time = new Time(
@@ -72,7 +72,7 @@ final class TimeController extends AbstractController
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
                 $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
-                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addSeconds(30)->toDateTimeString();
+                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(2)->toDateTimeString();
                 $totalDays = (int) Carbon::create(2024, 4, 26)->diffInDays($finalTime);
 
                 $time->setFinalTime($finalTime);

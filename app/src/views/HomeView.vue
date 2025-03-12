@@ -182,7 +182,7 @@
 
     timeUntilUpdate.value = `${minutes}:${seconds}`;
 
-    if (duration.asSeconds() <= 0) {
+    if (duration.asMilliseconds() <= 0) {
       clearInterval(timerInterval);
       fetchTimestamp(); // Atualiza o calendário quando der meia-noite
     }
@@ -217,8 +217,8 @@
 
   async function fetchTimestamp() {
     try {
-      const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
-      // const { data } = await axios.get('http://localhost:8000/api/time').then(res => res)
+      // const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
+      const { data } = await axios.get('http://localhost:8000/api/time').then(res => res)
 
       const finalTime = momentbr(data?.finalTime);
 
