@@ -64,6 +64,8 @@
               class="px-4 py-2 rounded relative z-0"
               @mousedown="() => isLastInRange(day, 0) && showToast()"
             >
+              <span class="absolute text-xs text-nowrap w-fit -bottom-3 bg-white font-bold text-black" v-if="isLastInRange(day, 0)">Click-me</span>
+
               <span>
                 {{ day }}
               </span>
@@ -248,9 +250,11 @@
 </script>
 
 <style>
-  .fade-enter-active,
-  .fade-leave-active {
+  .fade-enter-active {
     transition: opacity 0.5s ease;
+  }
+  .fade-leave-active {
+    transition: opacity 3s ease;
   }
 
   .fade-enter-from,
