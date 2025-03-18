@@ -8,7 +8,7 @@
             Calendário Subathônico
           </div>
 
-          <img src="/img/PETTHEPEEPOMEIAUM.gif" alt="PET THE PEEPO MEIAUM">
+          <img src="/img/PETTHEPEEPOMEIAUM.webp" alt="PET THE PEEPO MEIAUM">
         </div>
 
         <div class="flex justify-between items-center mb-4">
@@ -51,7 +51,7 @@
                 <span>
                   {{ day }}
                 </span>
-                <img v-if="isToday(day)" src="/img/peepoMeiaTalk.gif" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+                <img v-if="isToday(day)" src="/img/peepoMeiaTalk.webp" alt="WAJAJA" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
               </a>
             </div>
 
@@ -79,11 +79,11 @@
                 {{ day }}
               </span>
 
-              <img v-if="isLastInRange(day, 0)" src="/img/meiaA.gif" alt="Animação do meia um desaparecendo" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="isLastInRange(day, 0)" src="/img/meiaA.webp" alt="Animação do meia um desaparecendo" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
-              <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="Meia um fazendo joia com o polegar" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJoia.webp" alt="Meia um fazendo joia com o polegar" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
-              <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="Meia um dormindo confi" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.webp" alt="Meia um dormindo confi" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
               
               <img v-if="!isToday(day) && isBirthday(day)" src="/img/meiaFrita.webp" alt="Meia um fritando" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
             </div>
@@ -127,7 +127,7 @@
           <p class="sm:text-4xl text-2xl mt-3">
             {{ lastTime }}
           </p>
-          <img class="mx-auto mt-8" src="/img/MeiaTimer.gif" alt="Meia um olhando para cima vendo o timer da subathon comicamente alto">
+          <img class="mx-auto mt-8" src="/img/meiaTimer.webp" alt="Meia um olhando para cima vendo o timer da subathon comicamente alto">
         </div>
       </div>
     </Transition>
@@ -142,7 +142,7 @@
           <p class="sm:text-4xl text-2xl my-3">
             {{ daysUntilBirthday() }} dias
           </p>
-          <p>Para o 1° Niverthon</p>
+          <p>para o 1° Niverthon</p>
           <img class="mx-auto mt-8" src="/img/meiaFrita.webp" alt="Meia um fritando">
         </div>
       </div>
