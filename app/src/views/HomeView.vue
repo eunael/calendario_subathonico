@@ -60,11 +60,20 @@
                 'bg-green-500 text-white': isInRange(day, 0) === 'green',
                 'bg-gray-50 text-black': isInRange(day, 0) === 'white',
                 'bg-sky-600 text-white cursor-pointer': isLastInRange(day, 0),
+                'bg-pink-300 text-white cursor-pointer': isBirthday(day)
               }"
               class="px-4 py-2 rounded relative z-0"
-              @mousedown="() => isLastInRange(day, 0) && showToast()"
+              @mousedown="() => {
+                if(isLastInRange(day, 0)) {
+                  showToast()
+                } else if(isBirthday(day)) {
+                  showBirthdayToastAction()
+                }
+              }"
             >
-              <span class="absolute text-xs text-nowrap w-fit -bottom-3 bg-white font-bold text-black" v-if="isLastInRange(day, 0)">Click-me</span>
+              <span class="absolute text-nowrap w-fit -bottom-2.5 -right-2.5 rotate-330 font-bold text-white z-11" v-if="isLastInRange(day, 0) || isBirthday(day)" title="Click me">
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="25"  height="25"  viewBox="0 0 24 24"  fill="white"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-hand-click"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 13v-8.5a1.5 1.5 0 0 1 3 0v7.5" /><path d="M11 11.5v-2a1.5 1.5 0 0 1 3 0v2.5" /><path d="M14 10.5a1.5 1.5 0 0 1 3 0v1.5" /><path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7l-.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" /><path d="M5 3l-1 -1" /><path d="M4 7h-1" /><path d="M14 3l1 -1" /><path d="M15 6h1" /></svg>
+              </span>
 
               <span>
                 {{ day }}
@@ -75,6 +84,8 @@
               <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJOIA.webp" alt="Meia um fazendo joia com o polegar" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
               <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.png" alt="Meia um dormindo confi" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              
+              <img v-if="!isToday(day) && isBirthday(day)" src="/img/meiaFrita.webp" alt="Meia um fritando" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
             </div>
           </div>
 
@@ -121,6 +132,22 @@
       </div>
     </Transition>
 
+    <Transition name="fade">
+      <div
+        v-if="showBirthdayToast"
+        class="bg-black text-gray-50 text-nowrap absolute w-full h-screen flex justify-center items-center"
+      >
+        <div class="text-center font-bold">
+          <p>Falta...</p>
+          <p class="sm:text-4xl text-2xl my-3">
+            {{ daysUntilBirthday() }} dias
+          </p>
+          <p>Para o 1° Niverthon</p>
+          <img class="mx-auto mt-8" src="/img/meiaFrita.webp" alt="Meia um fritando">
+        </div>
+      </div>
+    </Transition>
+
   </div>
 </template>
 
@@ -139,8 +166,12 @@
   const timeToUpdate = ref("00:00:00")
   const timeUntilUpdate = ref("00:00")
   const totalDays = ref(0)
+  const finalTime: Ref<Moment> = ref(momentbr())
   const lastTime = ref('')
   const showToastState = ref(false)
+  const showBirthdayToast = ref(false)
+  const birthdayDay = 26
+  const birthdayMonth = 3
   let timerInterval: any = null
  
   function nextMonth() {
@@ -174,6 +205,21 @@
     const lastDate = highlightedRange.value[highlightedRange.value.length - 1];
     return lastDate && date.isSame(lastDate, "day");
   }
+  function isBirthday(day: number) {
+    return day === birthdayDay && currentMonth.value === birthdayMonth;
+  }
+  function daysUntilBirthday() {
+    const birthday = momentbr({month: birthdayMonth, day: birthdayDay})
+
+    let leftDaysUntilBirthDay = moment.duration(birthday.diff(finalTime.value)).asDays()
+
+    if (leftDaysUntilBirthDay < 0) {
+      birthday.add(1, 'year')
+      leftDaysUntilBirthDay = moment.duration(birthday.diff(finalTime.value)).asDays()
+    }
+
+    return leftDaysUntilBirthDay.toFixed(0)
+  }
   function updateTimer() {
     const now = momentbr();
     const toUpdate = momentbr(timeToUpdate.value);
@@ -199,6 +245,12 @@
       showToastState.value = false;
     }, 3000);
   }
+  function showBirthdayToastAction() {
+    showBirthdayToast.value = true;
+    setTimeout(() => {
+      showBirthdayToast.value = false;
+    }, 3000);
+  }
 
   const currentMonthName = computed(() => {
     return ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][currentMonth.value]
@@ -221,13 +273,13 @@
       const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
       // const { data } = await axios.get('http://localhost:8001/api/time').then(res => res)
 
-      const finalTime = momentbr(data?.finalTime);
+      finalTime.value = momentbr(data?.finalTime);
 
       timeToUpdate.value = data.timeToUpdate
       totalDays.value = data.totalDays
-      lastTime.value = finalTime.format('DD/MM/YYYY à[s] HH:mm:ss')
+      lastTime.value = finalTime.value.format('DD/MM/YYYY à[s] HH:mm:ss')
       
-      const endDate = finalTime;
+      const endDate = finalTime.value;
       const startDate = momentbr("2024-04-26");
 
       const range = [];
