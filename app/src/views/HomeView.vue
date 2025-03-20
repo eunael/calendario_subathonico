@@ -138,7 +138,7 @@
         class="bg-black text-gray-50 text-nowrap absolute w-full h-screen flex justify-center items-center"
       >
         <div class="text-center font-bold">
-          <p>Falta...</p>
+          <p>Faltam...</p>
           <p class="sm:text-4xl text-2xl my-3">
             {{ daysUntilBirthday() }} dias
           </p>
