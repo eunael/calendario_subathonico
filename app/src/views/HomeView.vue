@@ -211,11 +211,11 @@
   function daysUntilBirthday() {
     const birthday = momentbr({month: birthdayMonth, day: birthdayDay})
 
-    let leftDaysUntilBirthDay = moment.duration(birthday.diff(finalTime.value)).asDays()
+    let leftDaysUntilBirthDay = moment.duration(birthday.diff(momentbr())).asDays()
 
     if (leftDaysUntilBirthDay < 0) {
       birthday.add(1, 'year')
-      leftDaysUntilBirthDay = moment.duration(birthday.diff(finalTime.value)).asDays()
+      leftDaysUntilBirthDay = moment.duration(birthday.diff(momentbr())).asDays()
     }
 
     return leftDaysUntilBirthDay.toFixed(0)
