@@ -142,7 +142,7 @@
           <p class="sm:text-4xl text-2xl my-3">
             {{ daysUntilBirthday() }} dias
           </p>
-          <p>para o 1° Niverthon</p>
+          <p>para o Niverthon</p>
           <img class="mx-auto mt-8" src="/img/meiaFrita.webp" alt="Meia um fritando">
         </div>
       </div>
@@ -206,16 +206,27 @@
     return lastDate && date.isSame(lastDate, "day");
   }
   function isBirthday(day: number) {
-    return day === birthdayDay && currentMonth.value === birthdayMonth;
+    const isTheDay = day === birthdayDay && currentMonth.value === birthdayMonth
+
+    if(isTheDay) {
+      const today = momentbr().startOf('day')
+      const birthday = momentbr({month: birthdayMonth, day: birthdayDay}).startOf('day')
+      const year = birthday.isAfter(today) ? birthday.year() : birthday.year() + 1;
+      
+      return currentYear.value === year
+    }
+
+    return false;
   }
   function daysUntilBirthday() {
-    const birthday = momentbr({month: birthdayMonth, day: birthdayDay})
+    const now = momentbr().startOf('day')
+    const birthday = momentbr({month: birthdayMonth, day: birthdayDay}).startOf('day')
 
-    let leftDaysUntilBirthDay = moment.duration(birthday.diff(momentbr())).asDays()
+    let leftDaysUntilBirthDay = moment.duration(birthday.diff(now)).asDays()
 
     if (leftDaysUntilBirthDay < 0) {
       birthday.add(1, 'year')
-      leftDaysUntilBirthDay = moment.duration(birthday.diff(momentbr())).asDays()
+      leftDaysUntilBirthDay = moment.duration(birthday.diff(now)).asDays()
     }
 
     return leftDaysUntilBirthDay.toFixed(0)
