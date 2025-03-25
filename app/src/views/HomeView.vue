@@ -3,6 +3,7 @@
     <div class="flex justify-center items-center flex-grow">
       <div class="w-full max-w-md px-4 sm:px-0">
 
+        <!-- Title -->
         <div class="mb-8 flex justify-between items-center gap-2">
           <div class="text-end text-4xl font-extrabold ">
             Calendário Subathônico
@@ -11,20 +12,24 @@
           <img src="/img/PETTHEPEEPOMEIAUM.webp" alt="PET THE PEEPO MEIAUM">
         </div>
 
-        <div class="flex justify-between items-center mb-4">
-          <button @click="previousMonth" class="cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
-          </button>
+        <!-- Controls -->
+         <div>
+           <div class="flex justify-between items-center mb-4">
+             <button @click="previousMonth" class="cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+             </button>
+   
+             <h2 class="text-xl font-bold">{{ currentMonthName }} / {{ currentYear }}</h2>
+             
+             <button @click="nextMonth" class="cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+             </button>
+           </div>
 
-          <h2 class="text-xl font-bold">{{ currentMonthName }} / {{ currentYear }}</h2>
-          
-          <button @click="nextMonth" class="cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
-          </button>
-        </div>
+           <button @click="goToToday" class="cursor-pointer mb-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded">Hoje</button>
+         </div>
 
-        <button @click="goToToday" class="cursor-pointer mb-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded">Hoje</button>
-
+        <!-- Calendar -->
         <div class="grid grid-cols-7 gap-2 text-center">
 
           <div v-for="day in daysOfWeek" :key="day" class="font-bold">{{ day }}</div>
@@ -71,7 +76,7 @@
                 }
               }"
             >
-              <span class="absolute text-nowrap w-fit -bottom-2.5 -right-2.5 rotate-330 font-bold text-white z-11" v-if="isLastInRange(day, 0) || isBirthday(day)" title="Click me">
+              <span class="absolute text-nowrap w-fit -bottom-2.5 -right-2.5 rotate-330 font-bold text-white z-11 animate-pulse" v-if="isLastInRange(day, 0) || isBirthday(day)" title="Click me">
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="25"  height="25"  viewBox="0 0 24 24"  fill="white"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-hand-click"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 13v-8.5a1.5 1.5 0 0 1 3 0v7.5" /><path d="M11 11.5v-2a1.5 1.5 0 0 1 3 0v2.5" /><path d="M14 10.5a1.5 1.5 0 0 1 3 0v1.5" /><path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7l-.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" /><path d="M5 3l-1 -1" /><path d="M4 7h-1" /><path d="M14 3l1 -1" /><path d="M15 6h1" /></svg>
               </span>
 
@@ -104,6 +109,7 @@
 
         </div>
 
+        <!-- Infos -->
         <div class="mt-4 font-extrabold text-end">
           {{ totalDays }} dias de live...<br>
           {{ timeUntilUpdate }} atualiza
@@ -170,7 +176,7 @@
   const lastTime = ref('')
   const showToastState = ref(false)
   const showBirthdayToast = ref(false)
-  const birthdayDay = 26
+  const birthdayDay = 27
   const birthdayMonth = 3
   let timerInterval: any = null
  
@@ -291,7 +297,7 @@
       lastTime.value = finalTime.value.format('DD/MM/YYYY à[s] HH:mm:ss')
       
       const endDate = finalTime.value;
-      const startDate = momentbr("2024-04-26");
+      const startDate = momentbr({y: 2024, M: birthdayMonth, d: birthdayDay});
 
       const range = [];
       let currentDate = momentbr(startDate);
