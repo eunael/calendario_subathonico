@@ -123,6 +123,7 @@
             target="_blank">eunael</a>.
     </div>
 
+    <!-- Toast to display the last moment -->
     <Transition name="fade">
       <div
         v-if="showToastState"
@@ -138,6 +139,7 @@
       </div>
     </Transition>
 
+    <!-- Toast to show how many days are left until the birthday -->
     <Transition name="fade">
       <div
         v-if="showBirthdayToast"
@@ -225,7 +227,7 @@
     return false;
   }
   function daysUntilBirthday() {
-    const now = momentbr().startOf('day')
+    const now = momentbr()
     const birthday = momentbr({month: birthdayMonth, day: birthdayDay}).startOf('day')
 
     let leftDaysUntilBirthDay = moment.duration(birthday.diff(now)).asDays()
@@ -235,7 +237,7 @@
       leftDaysUntilBirthDay = moment.duration(birthday.diff(now)).asDays()
     }
 
-    return leftDaysUntilBirthDay.toFixed(0)
+    return Math.trunc(leftDaysUntilBirthDay)
   }
   function updateTimer() {
     const now = momentbr();
