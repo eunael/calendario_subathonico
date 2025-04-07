@@ -227,7 +227,7 @@
     return false;
   }
   function daysUntilBirthday() {
-    const now = momentbr()
+    const now = momentbr().startOf('day')
     const birthday = momentbr({month: birthdayMonth, day: birthdayDay}).startOf('day')
 
     let leftDaysUntilBirthDay = moment.duration(birthday.diff(now)).asDays()
