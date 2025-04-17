@@ -46,6 +46,7 @@ final class TimeController extends AbstractController
             $times = $timeRepository->findAll();
             $time = empty($times) ? null : $times[0];
             $timerEndpoint = $this->params->get('timer.timer_endpoint');
+            $resetValueInSeconds = $this->params->get('timer.reset_value');
             $initialDay = Carbon::create(2024, 4, 26);
 
             if ($time === null) {
@@ -54,7 +55,7 @@ final class TimeController extends AbstractController
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
                 $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
-                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString();
+                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addSeconds($resetValueInSeconds)->toDateTimeString();
                 $totalDays = (int) $initialDay->diffInDays($finalTime);
 
                 $time = new Time(
@@ -72,7 +73,7 @@ final class TimeController extends AbstractController
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
                 $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
-                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addMinutes(5)->toDateTimeString();
+                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addSeconds($resetValueInSeconds)->toDateTimeString();
                 $totalDays = (int) Carbon::create(2024, 4, 26)->diffInDays($finalTime);
 
                 $time->setFinalTime($finalTime);
