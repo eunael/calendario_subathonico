@@ -294,8 +294,8 @@
 
   async function fetchTimestamp() {
     try {
-      // const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
-      const { data } = await axios.get('http://localhost:8001/api/time').then(res => res)
+      const { data } = await axios.get('https://api-calendario-subathonico.nziim.com/api/time').then(res => res)
+      // const { data } = await axios.get('http://localhost:8001/api/time').then(res => res)
 
       finalTime.value = momentbr(data?.finalTime);
 
