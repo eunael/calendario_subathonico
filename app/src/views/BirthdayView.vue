@@ -89,11 +89,11 @@
                 {{ day }}
               </span>
 
-              <img v-if="isLastInRange(day, 0)" src="/img/meiaA.webp" alt="Animação do meia um desaparecendo" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="isLastInRange(day, 0) && !isBirthday(day)" src="/img/meiaA.webp" alt="Animação do meia um desaparecendo" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
-              <img v-if="!isToday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJoia.webp" alt="Meia um fazendo joia com o polegar" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="!isToday(day) && !isBirthday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJoia.webp" alt="Meia um fazendo joia com o polegar" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
-              <img v-if="!isToday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.webp" alt="Meia um dormindo confi" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              <img v-if="!isToday(day) && !isBirthday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.webp" alt="Meia um dormindo confi" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
               
               <img v-if="!isToday(day) && isBirthday(day)" src="/img/peepoBirthday.webp" alt="Meia um fritando" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">              
             </div>
