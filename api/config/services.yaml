@@ -6,7 +6,7 @@
 parameters:
     timer.timer_endpoint: '%env(TIMER_ENDPOINT)%'
     timer.password: '%env(PASSWORD)%'
-    timer.reset_value: 10
+    timer.reset_value: 120
 
 services:
     # default configuration for services in *this* file
