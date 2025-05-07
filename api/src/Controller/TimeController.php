@@ -70,14 +70,21 @@ final class TimeController extends AbstractController
             } elseif (Carbon::now('America/Sao_Paulo')->isAfter(Carbon::parse($time->getTimeToUpdate(), 'America/Sao_Paulo'))) {
                 $timeLeft = (int) $httpClient->request('GET', $timerEndpoint)->toArray()['timeLeft'];
 
+                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addSeconds($resetValueInSeconds)->toDateTimeString();
+                $time->setTimeToUpdate($timeToUpdate);
+
+                if ($timeLeft === 0) {
+                    $timeRepository->update();
+
+                    return $this->json($time);
+                }
+
                 $currentTime = Carbon::now('America/Sao_Paulo')->getTimestampMs();
 
                 $finalTime = Carbon::createFromTimestampMs($currentTime + $timeLeft, 'America/Sao_Paulo')->toDateTimeString();
-                $timeToUpdate = Carbon::now('America/Sao_Paulo')->addSeconds($resetValueInSeconds)->toDateTimeString();
                 $totalDays = (int) Carbon::create(2024, 4, 26)->diffInDays($finalTime);
 
                 $time->setFinalTime($finalTime);
-                $time->setTimeToUpdate($timeToUpdate);
                 $time->setTotalDays($totalDays);
 
                 $timeRepository->update();
