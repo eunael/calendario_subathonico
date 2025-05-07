@@ -30,7 +30,22 @@
              </button>
            </div>
 
-           <button @click="goToToday" class="cursor-pointer mb-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded">Hoje</button>
+           <div class="flex items-center gap-3 mb-4">
+              <div class="font-bold">
+                Ir para:
+              </div>
+
+              <button @click="goToToday" class="flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded cursor-pointer">
+                Hoje
+              </button>
+
+              <a href="https://twitch.tv/omeiaum" target="_blank">
+                <button class="flex items-middle space-x-1 px-4 py-2 bg-red-500 hover:bg-red-600 rounded cursor-pointer">
+                  <div>Live</div>
+                  <img src="/img/peepoMeiaUm.webp" alt="Peppo talk" class="w-6">
+                </button>
+              </a>
+            </div>
          </div>
 
         <!-- Calendar -->
@@ -55,23 +70,19 @@
             v-for="day in daysInMonth"
             :key="`day-${day}`"
           >
-            <div v-if="isToday(day)" class="bg-red-500 text-white px-4 py-2 rounded cursor-pointer relative z-0">
-              <a href="https://twitch.tv/omeiaum" target="_blank">
-                <span>
-                  {{ day }}
-                </span>
-                <img v-if="isToday(day)" src="/img/peepoMeiaTalk.webp" alt="Peepo Meia Talk" class="absolute top-1/2 -translate-y-1/2 z-10 w-7">
-                <img v-if="isBirthday(day)" src="/img/birthdayHat.webp" alt="Meia um fritando" class="absolute top-1/2 -translate-y-1/2 z-10 w-7">
-              </a>
-            </div>
-
-            <div v-else
-              :class="{
-                'bg-green-500 text-white': isInRange(day, 0) === 'green',
-                'bg-gray-50 text-black': isInRange(day, 0) === 'white',
-                'bg-sky-600 text-white cursor-pointer': isLastInRange(day, 0),
-                'bg-pink-300 text-white cursor-pointer': isBirthday(day)
-              }"
+            <div
+            :class="[
+                  {
+                    'bg-green-500 text-white': isInRange(day, 0) === 'green',
+                    'bg-gray-50 text-black': isInRange(day, 0) === 'white',
+                    'bg-sky-600 text-white': !isToday(day) && isLastInRange(day, 0),
+                    'bg-red-500 text-white': isToday(day),
+                    'bg-pink-300 text-white': isBirthday(day),
+                  },
+                  {
+                    'cursor-pointer': isLastInRange(day, 0) || isBirthday(day),
+                  }
+              ]"
               class="px-4 py-2 rounded relative z-0"
               @mousedown="() => {
                 if(isLastInRange(day, 0)) {
@@ -91,6 +102,10 @@
 
               <img v-if="isLastInRange(day, 0) && !isBirthday(day)" src="/img/meiaA.webp" alt="Animação do meia um desaparecendo" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
+              <img v-if="isToday(day) && (isBirthday(day) || !isLastInRange(day, 0))" src="/img/peepoMeiaTalk.webp" alt="Peepo talking" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
+              
+              <img v-if="isBirthday(day)" src="/img/birthdayHat.webp" alt="Meia um fritando" class="absolute top-1/2 -translate-y-1/2 z-10 w-7">
+
               <img v-if="!isToday(day) && !isBirthday(day) && isInRange(day, 0) === 'green'" src="/img/meiaJoia.webp" alt="Meia um fazendo joia com o polegar" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
   
               <img v-if="!isToday(day) && !isBirthday(day) && isInRange(day, 0) === 'white' && !isLastInRange(day, 0)" src="/img/meiaBedge.webp" alt="Meia um dormindo confi" class="absolute top-1/2 -translate-y-1/2 z-10 w-7 hover:opacity-0">
@@ -139,7 +154,12 @@
           <p class="sm:text-4xl text-2xl mt-3">
             {{ lastTime }}
           </p>
-          <img class="mx-auto mt-8" src="/img/meiaTimer.webp" alt="Meia um olhando para cima vendo o timer da subathon comicamente alto">
+
+          <img class="mx-auto my-8" src="/img/meiaTimer.webp" alt="Meia um olhando para cima vendo o timer da subathon comicamente alto">
+
+          <a href="https://twitch.tv/omeiaum" target="_blank" class="w-full flex justify-center text-nowrap underline">
+            Ir para a live&nbsp;<img src="/img/peepoMeiaUm.webp" alt="Peppo talk" class="w-6">
+          </a>
         </div>
       </div>
     </Transition>
@@ -301,7 +321,7 @@
 
       timeToUpdate.value = data.timeToUpdate
       totalDays.value = data.totalDays
-      lastTime.value = finalTime.value.format('DD/MM/YYYY à[s] HH:mm:ss')
+      lastTime.value = finalTime.value.format('DD/MM à[s] HH[h]mm')
       
       const endDate = finalTime.value;
       const startDate = momentbr({y: 2024, M: birthdayMonth, d: birthdayDay});
